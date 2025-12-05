@@ -673,18 +673,6 @@ pkill ollama
 
 ---
 
-## 📝 License
-
-[Add your license information here]
-
----
-
-## 👥 Authors
-
-[Add author information here]
-
----
-
 ## 🙏 Acknowledgments
 
 - LangChain/LangGraph team for the amazing framework
