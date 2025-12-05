@@ -1,0 +1,14 @@
+# --- Dependencies and Environments ---
+# Virtual environment folder
+venv/
+.venv/
+env/
+
+# Python compiled files
+__pycache__/
+*.pyc
+
+# Local/temporary files
+*.sqlite3
+financial_intel.db
+.DS_Store
