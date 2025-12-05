@@ -60,7 +60,7 @@
 #         # The filter must be wrapped in an operator (e.g., "$eq")
 #         chroma_filter['sentiment'] = {"$eq": query_filters.impact_direction.value}
     
-#     # NOTE on Entity Filtering: Since companies/sectors are stored as comma-separated 
+#     # Note on Entity Filtering: Since companies/sectors are stored as comma-separated 
 #     # strings and not lists (due to your ChromaDB version constraint), strict metadata 
 #     # filtering by entity name is difficult/unreliable. We rely on the semantic search 
 #     # query and the final LLM synthesis (Step 4) to handle entity relevance.
@@ -238,7 +238,7 @@ def query_processing_agent(user_query: str) -> Dict[str, Any]:
         retrieved_docs = vector_db_client.search(
             query=filters.search_query,
             chroma_filter=chroma_filter,
-            top_k=5
+            top_k=7
         )
 
         if not retrieved_docs:
