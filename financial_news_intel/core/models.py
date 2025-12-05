@@ -124,6 +124,5 @@ class QueryFilter(BaseModel):
     )
     # The clean, rephrased query string for semantic search
     search_query: str = Field(
-        description="The clean, simplified, non-filter part of the user query for semantic search (e.g., 'latest news about dividend payments').",
-        alias="query"
+        description="The clean, simplified, non-filter part of the user query for semantic search (e.g., 'latest news about dividend payments')."
     )

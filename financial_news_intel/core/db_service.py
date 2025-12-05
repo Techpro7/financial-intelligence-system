@@ -126,18 +126,6 @@ class DatabaseService:
         cursor.execute(impacts_query, (story_id,))
         impact_rows = cursor.fetchall()
         
-        # impact_details = [
-        #     f"{ticker} ({direction.lower()}, Conf: {confidence:.2f})" 
-        #     for ticker, direction, confidence in impact_rows
-        # ]
-        
-        # return {
-        #     "story_id": story_id,
-        #     "text": story_text,  # CRITICAL FIX: Use story_text variable
-        #     "sentiment": sentiment,
-        #     "companies": companies_json,
-        #     "impacts": ", ".join(impact_details)
-        # }
 
         impact_details = [
             {

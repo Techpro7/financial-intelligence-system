@@ -1,6 +1,6 @@
 from financial_news_intel.core.models import FinancialNewsState
-from financial_news_intel.core.db_service import db_service        # 🌟 NEW FILE 🌟
-from financial_news_intel.core.vector_db import vector_db_client  # 🌟 CORRECTED IMPORT 🌟
+from financial_news_intel.core.db_service import db_service        
+from financial_news_intel.core.vector_db import vector_db_client  
 from langgraph.graph import END
 
 def storage_index_agent(state: FinancialNewsState) -> FinancialNewsState:
@@ -38,14 +38,6 @@ def storage_index_agent(state: FinancialNewsState) -> FinancialNewsState:
        # Metadata needed for RAG filtering
         metadata = {
             # "story_id": story.unique_story_id,
-            
-            # "companies": story.entities.companies, 
-            # "sectors": story.entities.sectors,
-            # "regulators": story.entities.regulators,
-            
-            # "sentiment": story.sentiment, # Use .value if it's an Enum
-            # "db_id": story_id_pk, # Link back to the SQL record
-            # 🌟 CRITICAL FIX: Convert lists to comma-separated strings 🌟
             "companies": ",".join(story.entities.companies), 
             "sectors": ",".join(story.entities.sectors),
             "regulators": ",".join(story.entities.regulators),
