@@ -1,14 +1,85 @@
-# --- Dependencies and Environments ---
-# Virtual environment folder
+# --- Python Virtual Environments ---
 venv/
 .venv/
 env/
+ENV/
+financial_news_intel/venv/
+**/venv/
+**/.venv/
 
-# Python compiled files
+# --- Python Bytecode ---
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Local/temporary files
+# --- OS / IDE Artifacts ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# --- Local Databases & Cache ---
 *.sqlite3
 financial_intel.db
-.DS_Store
+chromadb/
+chroma_index/
+.db/
+*.db-shm
+*.db-wal
+
+# --- Log Files ---
+*.log
+logs/
+
+# --- Model Files ---
+models/
+*.bin
+*.pth
+*.pt
+*.safetensors
+*.onnx
+*.tflite
+*.gguf
+
+# --- HuggingFace Cache ---
+~/.cache/huggingface/
+huggingface_cache/
+datasets/
+
+# --- LangChain / LLM Caches ---
+lc_cache/
+langchain_cache/
+cache/
+.tmp/
+
+# --- Compiled Shared Libraries (must ignore: they caused your GitHub failure) ---
+*.so
+*.dylib
+*.dll
+
+# --- Torch / ONNX Runtime Heavy Files (prevent accidental commits) ---
+torch/
+onnxruntime/
+financial_news_intel/**/*.so
+financial_news_intel/**/*.dylib
+
+# --- Build Artifacts ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Jupyter Notebook Artifacts ---
+.ipynb_checkpoints/
+*.checkpoint.ipynb
+
+# --- FastAPI / uvicorn files ---
+uvicorn.log
+*.pid
+
+# --- Temporary Files ---
+*.tmp
+*.bak
+*.old
