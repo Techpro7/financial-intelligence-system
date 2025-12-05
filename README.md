@@ -15,6 +15,12 @@ The system runs as multiple isolated services:
 3. **`api-service`**: A **FastAPI** application that provides a structured interface for querying the analyzed financial data.
 4. **`chroma`**: The Vector Database (ChromaDB) used for fast deduplication and semantic search (RAG).
 
+### System Design Diagram
+
+![System Architecture Diagram](system-architecture.png)
+
+*System architecture showing the flow of data through the Financial News Intelligence System*
+
 ---
 
 ## 📋 Table of Contents
