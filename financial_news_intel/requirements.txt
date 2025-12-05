@@ -1,0 +1,27 @@
+# requirements.txt
+
+# --- Core Framework and LLM Orchestration ---
+langgraph>=0.0.30       # The multi-agent workflow engine
+langchain>=0.2.0        # Core LangChain utilities
+langchain-core>=0.2.0
+langchain-community>=0.0.30  # Required for OllamaLLM integration
+langchain-ollama
+ipython
+feedparser
+pandas
+typer
+numpy
+
+# --- Embedding and Vector Database (For Deduplication and RAG) ---
+sentence-transformers>=2.7.0  # For generating article embeddings
+chromadb>=0.4.22            # The Vector Database for storage and semantic search
+
+# --- Structured Data and Validation ---
+pydantic>=2.7.0              # Used by LangChain/LangGraph for state and output validation
+
+# --- Entity Recognition (For Entity Extraction Agent) ---
+spacy>=3.7.4                 # The library for Named Entity Recognition (NER)
+
+# --- API/Web Server (For the API Agent and interaction) ---
+fastapi>=0.111.0             # High-performance web framework for API
+uvicorn>=0.30.0              # ASGI server to run FastAPI

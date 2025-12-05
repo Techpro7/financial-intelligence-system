@@ -1,0 +1,117 @@
+# # docker-compose.yml
+# version: '3.8'
+
+# services:
+#   # 1. Your Python Application Service
+#   app:
+#     # Build the image using the Dockerfile in the current directory
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     # Mount the current code into the container for easy development iteration
+#     volumes:
+#       - .:/app
+#     # Set the ChromaDB URL as an environment variable for your app to use
+#     environment:
+#       # CRITICAL: This hostname (chroma) is resolved by Docker's internal network
+#       CHROMA_DB_URL: http://chroma:8000
+#       CHROMA_DB_MODE: remote
+#     # Ensure the app starts after the Chroma service is ready
+#     depends_on:
+#       - chroma
+#     # If you need to run an interactive terminal (like in the test case)
+#     stdin_open: true
+#     tty: true
+
+#   # 2. ChromaDB Server Service
+#   chroma:
+#     image: chromadb/chroma:latest
+#     container_name: chroma_server
+#     # Map container port 8000 to host port 8000 (allows you to access it from your host machine)
+#     ports:
+#       - "8000:8000"
+#     # CRITICAL: Use a named volume to persist the vector data on your local disk.
+#     # This prevents data loss when you stop the container.
+#     volumes:
+#       - chroma_data:/chroma/chroma
+
+#     # command: ["uvicorn", "chromadb.app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--allow-reset", "--pre-flight-checks", "--persist_directory", "/chroma/chroma"]
+#     environment:
+#       # Optional: set persistence flags
+#       - IS_PERSISTENT= "TRUE"
+#       - PERSIST_DIRECTORY= "/chroma/chroma"
+#       # CRITICAL FIX: Add this line to allow client.reset()
+#       - ALLOW_RESET= 1
+
+
+# # Define the named volume for persistent storage
+# volumes:
+#   chroma_data:
+
+# docker-compose.yml - UPDATED FOR API AND WORKER SERVICES
+version: '3.8'
+
+services:
+  # 1. ChromaDB Server Service
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: chroma_server
+    # Map container port 8000 to host port 8001 to avoid conflicts if needed, 
+    # but 8000 is fine if you only have one Chroma instance. We'll use 8000 for simplicity.
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT= "TRUE"
+      - PERSIST_DIRECTORY= "/chroma/chroma"
+      - ALLOW_RESET= 1 # Critical for development/testing
+
+  # 2. API Service (Handles User Queries - runs FastAPI)
+  api-service:
+    # Use the same build context as the original 'app' service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: financial-intel-app
+    container_name: financial_intel_api
+    # CRITICAL: Command to start the Uvicorn/FastAPI server
+    command: uvicorn financial_news_intel.api.api:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+    # Expose the API port (8000) for user access
+    ports:
+      - "8080:8000" # Mapping host port 8080 to container port 8000 for FastAPI
+    depends_on:
+      - chroma
+    environment:
+      # Keep the DB URL consistent
+      CHROMA_DB_URL: http://chroma:8000
+      CHROMA_DB_MODE: remote
+      # Add LLM environment variables here (e.g., OLLAMA_HOST, etc.)
+    # Remove stdin_open and tty, as this is a background service
+
+  # 3. Ingestion Worker (Runs Scheduled LangGraph Pipeline)
+  ingestion-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: financial-intel-app
+    container_name: financial_intel_worker
+    # CRITICAL: Command to run the Python scheduler script
+    command: python financial_news_intel/scheduler/ingestion_worker.py
+    volumes:
+      - .:/app
+    depends_on:
+      - chroma
+      - api-service # Worker often depends on other services being up
+    environment:
+      # Keep the DB URL consistent
+      CHROMA_DB_URL: http://chroma:8000
+      CHROMA_DB_MODE: remote
+      # Add LLM environment variables here (must match api-service)
+    # This service does not need exposed ports
+
+# Define the named volume for persistent storage
+volumes:
+  chroma_data:
